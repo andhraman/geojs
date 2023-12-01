@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>venjkhatesh</h1>
+    <h1>Click the button to get your location</h1>
+    <button onclick="getLocation()">Get Location</button>
+  
+    <script>
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition, showError, { enableHighAccuracy: true });
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+  
+      function showPosition(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        fetch(`/save-location?latitude=${latitude}&longitude=${longitude}`, { timeout: 5000 })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(responseText => {
+          console.log(responseText); // Log the server response
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+        console.log("ehehy")
+        // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      }
+  
+      function showError(error) {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+          case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+          case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+        }
+      }
+    </script>
+</body>
+</html>
