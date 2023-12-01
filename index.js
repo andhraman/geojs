@@ -16,6 +16,7 @@ const db = client.db(dbName);
 app.get('/save-location', (req, res) => {
   const { latitude, longitude } = req.query;
   const currentDateTimeIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+ 
 
 client.connect()
   .then(() => {
@@ -28,6 +29,7 @@ client.connect()
           latitude: parseFloat(latitude),
           longitude: parseFloat(longitude),
           Date: currentDateTimeIST,
+          // ipAddress: clientIP,
         })
     
     });
